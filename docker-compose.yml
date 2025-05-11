@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    ports:
+      - "5001:5000"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9091:9090"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
